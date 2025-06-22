@@ -14,7 +14,7 @@ const Hero = () => {
     const heroSplit = new SplitText('.title', { type: 'chars, words' });
     const paragraphSplit = new SplitText('.subtitle', { type: 'lines' }); 
 
-    heroSplit.chars.forEach((char) => char.classList.add('text-gradient')); 
+    heroSplit.chars.forEach((char) => char.classList.add('text-gradient'));
 
     gsap.from(heroSplit.chars, {
       yPercent: 100,
@@ -45,6 +45,23 @@ const Hero = () => {
 
     const startValue = isMobile ? 'top 50%': 'center 60%';
     const endValue = isMobile ? '120% top': 'bottom top';
+
+    // Video animation timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'video',
+        start: startValue,
+        end: endValue,
+        scrub: true,
+        pin: true,
+      }
+    });
+
+    videoRef.current.onloadedmetadata = () => {
+      tl.to(videoRef.current, {
+        currentTime: videoRef.current.duration,
+      })
+    }
   },[]);
 
   return (
@@ -82,7 +99,13 @@ const Hero = () => {
         </section>
 
         <div className="video absolute inset-0">
-          <video ref={videoRef} src="" muted playsInline preload="auto" />
+          <video 
+            ref={videoRef} 
+            src="/videos/output.mp4"
+            muted 
+            playsInline
+            preload="auto" 
+          />
         </div>
     </>
   )
